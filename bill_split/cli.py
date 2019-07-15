@@ -1,10 +1,5 @@
 #!/usr/env/python
-
-SPLIT_MAP = {
-    'User 1': .25,
-    'User 2': .38,
-    'User 3': .37,
-}
+from bill_split import config
 
 
 def read_float(prompt: str) -> float:
@@ -30,8 +25,10 @@ def main():
     total = total_cents / 100
     print(f"\n\nSplitting ${total:.2f}\n")
 
-    for person, percentage in SPLIT_MAP.items():
-        print(f"  {person}: ${total * percentage:.2f}")
+    options = config.read_config_file()
+
+    for person, percentage in options.get('splits', {}).items():
+        print(f"  {person}: ${total * percentage / 100:.2f}")
 
 
 if __name__ == '__main__':

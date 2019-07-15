@@ -12,5 +12,6 @@ setup(
     description='CLI to split monthly bills.',
     entry_points={
         'console_scripts': ['bill-split=bill_split.cli:main']
-    }
+    },
+    install_requires=['pyyaml']
 )
