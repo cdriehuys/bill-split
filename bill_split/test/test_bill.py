@@ -39,3 +39,33 @@ def test_split_odd_50_50():
 
     assert split[p1] == 1
     assert split[p2] == 2
+
+
+def test_str_should_be_in_dollars():
+    """
+    Converting a bill to a string should represent the bill's total in
+    dollars.
+    """
+    bill = Bill(123)
+
+    assert str(bill) == 'Bill for $1.23'
+
+
+def test_str_should_always_have_2_decimal_places():
+    """
+    Even if the bill divides evenly into dollars, the string
+    representation should have 2 decimal places.
+    """
+    bill = Bill(100)
+
+    assert str(bill) == 'Bill for $1.00'
+
+
+def test_str_should_have_thousands_separators():
+    """
+    Large bills should have thousands separators in their string
+    representation.
+    """
+    bill = Bill(123456)
+
+    assert str(bill) == 'Bill for $1,234.56'

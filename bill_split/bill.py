@@ -22,6 +22,13 @@ class Bill:
     def from_dollars(cls, dollars: float):
         return cls(round(dollars * 100))
 
+    def __str__(self):
+        """
+        Returns:
+            A string representing the bill's total.
+        """
+        return f'Bill for ${self.cents / 100:,.2f}'
+
     def split(self, split_map: dict) -> dict:
         # TODO: Fix 100% split assumption
         logger.debug("Splitting bill for %d cents", self.cents)

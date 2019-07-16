@@ -5,7 +5,7 @@ CLI to split monthly bills.
 ## Usage
 
 ```bash
-bill-split
+bill-split <total>
 ```
 
 ## Configuration

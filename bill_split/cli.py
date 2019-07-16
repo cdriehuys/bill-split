@@ -1,35 +1,42 @@
 #!/usr/env/python
-
+import argparse
 import logging
 
 from bill_split import config, bill
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-def read_float(prompt: str) -> float:
+def get_parser():
     """
-    Read a floating point number from stdin.
-
     Returns:
-        The next valid floating point number given to stdin.
+        The parser used for command line arguments.
     """
-    while True:
-        try:
-            return float(input(prompt))
-        except ValueError:
-            print("Please enter a valid number.")
+    parser = argparse.ArgumentParser(description="Split a bill.")
+
+    parser.add_argument(
+        'total',
+        help=(
+            "The dollar amount of the bill to split. Up to 2 decimal places "
+            "may be provided. Any additional precision will be lost."
+        ),
+        type=float
+    )
+
+    return parser
 
 
 def main():
     """
     Entry point into the program.
     """
-    raw_dollars = read_float("Enter the total to split: $")
-    total_bill = bill.Bill.from_dollars(raw_dollars)
+    parser = get_parser()
+    args = parser.parse_args()
 
-    print(f"\n\nSplitting ${total_bill.cents / 100:.2f}\n")
+    total_bill = bill.Bill.from_dollars(args.total)
+    logger.info("Splitting %s", total_bill)
 
     options = config.read_config_file()
     split_map = options.get('splits', {})
