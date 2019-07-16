@@ -1,5 +1,11 @@
 #!/usr/env/python
-from bill_split import config
+
+import logging
+
+from bill_split import config, bill
+
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 def read_float(prompt: str) -> float:
@@ -20,15 +26,16 @@ def main():
     """
     Entry point into the program.
     """
-    total_raw = read_float("Enter the total to split: $")
-    total_cents = round(total_raw * 100)
-    total = total_cents / 100
-    print(f"\n\nSplitting ${total:.2f}\n")
+    raw_dollars = read_float("Enter the total to split: $")
+    total_bill = bill.Bill.from_dollars(raw_dollars)
+
+    print(f"\n\nSplitting ${total_bill.cents / 100:.2f}\n")
 
     options = config.read_config_file()
+    split_map = options.get('splits', {})
 
-    for person, percentage in options.get('splits', {}).items():
-        print(f"  {person}: ${total * percentage / 100:.2f}")
+    for person, cents in total_bill.split(split_map).items():
+        print(f"  {person}: ${cents / 100:.2f}")
 
 
 if __name__ == '__main__':
